@@ -31,6 +31,7 @@
 		<avro.version>1.8.2</avro.version>
 		<confluent.version>4.1.1</confluent.version>
 		<cucumber.version>3.0.2</cucumber.version>
+		<aspectj.version>1.9.5</aspectj.version>
 	</properties>
 
 	<dependencies>
@@ -138,6 +139,19 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
+		
+		<!--Allure Dependency--> 
+	       <dependency>
+		  <groupId>io.qameta.allure</groupId>
+		  <artifactId>allure-testng</artifactId>
+		  <version>2.13.1</version>
+	       </dependency>
+	       <dependency>
+		   <groupId>ru.yandex.qatools.allure</groupId>
+		   <artifactId>allure-testng-adaptor</artifactId>
+		   <version>1.5.4</version>
+	       </dependency>
+		
 	</dependencies>
 	<repositories>
 		<repository>
@@ -359,6 +373,41 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+					   <groupId>org.apache.maven.plugins</groupId>
+					   <artifactId>maven-surefire-plugin</artifactId>
+					   <version>2.22.2</version>
+					   <configuration>
+					     <testFailureIgnore>false</testFailureIgnore>
+					     <argLine>
+					       -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+					     </argLine>
+					   </configuration>
+					   <dependencies>
+					     <dependency>
+						<groupId>junit</groupId>
+						<artifactId>junit</artifactId>
+						<version>4.12</version>
+					    </dependency>
+					     <dependency>
+					       <groupId>org.aspectj</groupId>
+					       <artifactId>aspectjweaver</artifactId>
+					       <version>${aspectj.version}</version>
+					     </dependency>
+					   </dependencies>
+					</plugin>
+					<plugin>
+					   <groupId>io.qameta.allure</groupId>
+					   <artifactId>allure-maven</artifactId>
+					   <version>2.10.0</version>
+					   <configuration>
+					     <reportVersion>2.13.1</reportVersion>
+					     <configuration>
+					       <reportVersion>2.10.0</reportVersion>
+					       <reportDirectory>allure-report/</reportDirectory>
+					     </configuration>
+					   </configuration>
+					 </plugin>
 				</plugins>
 			</build>
 		</profile>
